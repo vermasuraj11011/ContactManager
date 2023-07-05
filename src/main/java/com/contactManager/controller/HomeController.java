@@ -5,6 +5,8 @@ import com.contactManager.entities.User;
 import com.contactManager.helper.Message;
 import com.contactManager.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,6 +17,9 @@ import javax.validation.Valid;
 
 @Controller
 public class HomeController {
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
     private UserRepo userRepo;
@@ -59,9 +64,10 @@ public class HomeController {
                 return "signup";
             }
 
-            user.setRole(Constant.ROLE_ADMIN);
+            user.setRole(Constant.ROLE_USER);
             user.setEnable(true);
             user.setImageUrl("default.png");
+            user.setPassword(this.passwordEncoder.encode(user.getPassword()));
 
             User userSaved = this.userRepo.save(user);
 
