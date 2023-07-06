@@ -6,7 +6,6 @@ import com.contactManager.helper.Message;
 import com.contactManager.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -65,7 +64,7 @@ public class HomeController {
             }
 
             if (result.hasErrors()) {
-                System.out.println(result.toString());
+                System.out.println(result);
                 model.addAttribute("user", user);
                 return "signup";
             }
@@ -75,11 +74,7 @@ public class HomeController {
             user.setImageUrl("default.png");
             user.setPassword(this.passwordEncoder.encode(user.getPassword()));
 
-            User userSaved = this.userRepo.save(user);
-
-            System.out.println("agreement " + agreement);
-            System.out.println("user " + user.toString());
-            System.out.println(model.toString());
+            this.userRepo.save(user);
 
             model.addAttribute("user", new User());
             session.setAttribute("message", new Message("User added successfully", "alert-success"));
