@@ -93,3 +93,10 @@ body{
 .table tbody tr td a{
     margin: 0px 10px;
 }
+
+.contact_profile_pic{
+    width:35px;
+    height:35px;
+    object-fit:cover;
+    border-radius:50%;
+}

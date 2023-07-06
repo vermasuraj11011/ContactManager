@@ -18,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
 import java.security.Principal;
-import java.util.List;
 
 @Controller
 @RequestMapping("/user")
@@ -68,7 +67,7 @@ public class UserController {
 
             if (imageFile.isEmpty()) {
                 System.out.println("Image is empty");
-
+                contact.setImageUrl(Constant.DEFAULT_CONTACT_IMAGE);
             } else {
                 String fileName = this.fileService.uploadImage(Constant.PATH_SAVE_IMAGE, imageFile);
                 contact.setImageUrl(fileName);
