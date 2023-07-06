@@ -13,7 +13,7 @@
   <body>
 <!--    navbar-->
     <nav class="navbar navbar-expand-lg navbar-dark  bg-primary">
-      <a class="navbar-brand" href="#">Contact Manager </a>
+      <a class="navbar-brand" href="#" th:href="@{/}">Contact Manager </a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -34,7 +34,8 @@
           </li>
 
 
-            <a class="nav-link" th:href="@{/signup}" tabindex="-1" aria-disabled="true">SignUp </a>
+          <li>
+            <a class="nav-link" th:href="@{/signup}" tabindex="-1" aria-disabled="true">SignUp</a>
           </li>
         </ul>
       </div>

@@ -1,10 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"
+      xmlns:th="http://www.thymeLeaf.org"
+      th:replace="normal/base::layout(~{::section})">
 <head>
     <meta charset="UTF-8">
     <title>User Dashboard</title>
 </head>
-<body>
-    <h1>Welcome to user dashboard</h1>
-</body>
+    <body>
+        <section>
+            <h1>Welcome to user dashboard <span th:text="${user.name}"></span></h1>
+            <h2 th:text="${user.email}"></h2>
+        </section>
+    </body>
 </html>

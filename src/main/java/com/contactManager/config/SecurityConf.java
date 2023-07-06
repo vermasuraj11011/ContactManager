@@ -37,14 +37,17 @@ public class SecurityConf  extends WebSecurityConfigurerAdapter {
     }
 
 
+    // TODO: 06/07/23 make error page for @("/login-fail")
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/user/**").hasRole("USER")
+                .antMatchers("/**").permitAll()
                 .and()
                 .formLogin().loginPage("/signin")
+                .defaultSuccessUrl("/user/index")
                 .and()
                 .csrf()
                 .disable();
