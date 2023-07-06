@@ -32,13 +32,19 @@ public class HomeController {
 
     @RequestMapping("/about")
     public String about(Model model) {
-        model.addAttribute("about", "About - This is Contact Manager");
+        model.addAttribute("title", "About - This is Contact Manager");
         return "about";
+    }
+
+    @RequestMapping("/signin")
+    public String login(Model model) {
+        model.addAttribute("title", "Login Page");
+        return "login";
     }
 
     @RequestMapping("/signup")
     public String signup(Model model) {
-        model.addAttribute("signup", "Signup - This is Contact Manager");
+        model.addAttribute("title", "Signup Page");
         model.addAttribute("user", new User());
         return "signup";
     }
