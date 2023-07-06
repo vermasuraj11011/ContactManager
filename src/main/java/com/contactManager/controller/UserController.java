@@ -31,6 +31,7 @@ public class UserController {
             Principal principal
     ) {
 //        addCommonData(model, principal);
+        model.addAttribute("title","User Dashboard");
         return "normal/user_dashboard";
     }
 
