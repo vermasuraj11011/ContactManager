@@ -4,22 +4,21 @@ import com.contactManager.config.Constant;
 import com.contactManager.entities.Contact;
 import com.contactManager.entities.User;
 import com.contactManager.helper.Message;
+import com.contactManager.repository.ContactRepo;
 import com.contactManager.repository.UserRepo;
 import com.contactManager.service.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 @RequestMapping("/user")
@@ -30,6 +29,9 @@ public class UserController {
 
     @Autowired
     private FileService fileService;
+
+    @Autowired
+    private ContactRepo contactRepo;
 
     @ModelAttribute
     private void addCommonData(Model model, Principal principal) {
@@ -89,8 +91,21 @@ public class UserController {
         return "normal/add_contact_form";
     }
 
-    @RequestMapping("/show-contacts")
-    public String showContact(Model model){
+    @RequestMapping("/show-contacts/{page}")
+    public String showContact(
+            @PathVariable("page") Integer page,
+            Model model,
+            Principal principal
+    ){
+        page = page - 1;
+        String email = principal.getName();
+        User user = this.userRepo.getUserByUserName(email);
+        Pageable pageable = PageRequest.of(page, Constant.DEFAULT_PAGE_SIZE);
+        Page<Contact> contacts = this.contactRepo.findContactsByUser(user.getId(),pageable);
+        model.addAttribute("contacts",contacts);
+        model.addAttribute("currentPage",page);
+        model.addAttribute("totalPages",contacts.getTotalPages());
+        model.addAttribute("title","View Contacts");
         return "normal/show_contacts";
     }
 }
