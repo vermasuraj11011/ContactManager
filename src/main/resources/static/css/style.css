@@ -40,7 +40,8 @@ body{
     background:white;
     height:100%;
     position:fixed;
-    padding-top:45px;
+    /*padding-top:45px;*/
+    padding-top:20px;
     z-index : 9999999999999999999;
 }
 
@@ -94,7 +95,7 @@ body{
     margin: 0px 10px;
 }
 
-.contact_profile_pic{
+td .contact_profile_pic{
     width:35px;
     height:35px;
     object-fit:cover;

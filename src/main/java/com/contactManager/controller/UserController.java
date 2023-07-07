@@ -16,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpSession;
 import java.security.Principal;
 
@@ -80,11 +81,11 @@ public class UserController {
             user.getContacts().add(contact);
             this.userRepo.save(user);
             System.out.println("Contact added ");
-            session.setAttribute("message",new Message("Success, Contact is added.","success"));
+            session.setAttribute("message", new Message("Success, Contact is added.", "success"));
 
         } catch (Exception e) {
             System.out.println("error " + e.getMessage());
-            session.setAttribute("message",new Message("Error! Contact does not added.","error"));
+            session.setAttribute("message", new Message("Error! Contact does not added.", "error"));
             e.printStackTrace();
         }
         return "normal/add_contact_form";
@@ -95,16 +96,33 @@ public class UserController {
             @PathVariable("page") Integer page,
             Model model,
             Principal principal
-    ){
+    ) {
         page = page - 1;
         String email = principal.getName();
         User user = this.userRepo.getUserByUserName(email);
         Pageable pageable = PageRequest.of(page, Constant.DEFAULT_PAGE_SIZE);
-        Page<Contact> contacts = this.contactRepo.findContactsByUser(user.getId(),pageable);
-        model.addAttribute("contacts",contacts);
-        model.addAttribute("currentPage",page);
-        model.addAttribute("totalPages",contacts.getTotalPages());
-        model.addAttribute("title","View Contacts");
+        Page<Contact> contacts = this.contactRepo.findContactsByUser(user.getId(), pageable);
+        model.addAttribute("contacts", contacts);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", contacts.getTotalPages());
+        model.addAttribute("title", "View Contacts");
         return "normal/show_contacts";
+    }
+
+    @GetMapping("/contact/{contactId}")
+    public String showContactInfo(
+            @PathVariable("contactId") Integer cId,
+            Model model,
+            Principal principal
+    ) {
+        System.out.println(cId);
+        Contact contact = this.contactRepo.findById(cId).get();
+        String userName = principal.getName();
+        User user = this.userRepo.getUserByUserName(userName);
+        if (user.getId() == contact.getUser().getId()) {
+            model.addAttribute("contact", contact);
+            model.addAttribute("title", contact.getName());
+        }
+        return "normal/contact_detail";
     }
 }
