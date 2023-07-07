@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpSession;
 import java.security.Principal;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/user")
@@ -124,5 +125,19 @@ public class UserController {
             model.addAttribute("title", contact.getName());
         }
         return "normal/contact_detail";
+    }
+
+    @GetMapping("/delete/{cId}")
+    private String deleteContact(
+            @PathVariable("cId") Integer cId,
+            Model model,
+            HttpSession session
+    ){
+        // TODO: 07/07/23 handel .get with proper exception
+        Contact contact = this.contactRepo.findById(cId).get();
+        contact.setUser(null);
+        this.contactRepo.delete(contact);
+        session.setAttribute("message", new Message("Contact deleted successfully","success"));
+        return "redirect:/user/show-contacts/1";
     }
 }

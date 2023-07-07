@@ -25,7 +25,7 @@
                 <tr th:each="c : ${contacts}">
                     <th scope="row" th:text="'CM2023'+${c.cId}">1</th>
                     <td >
-                        <img class="contact_profile_pic" src="" th:src="@{'/image/'+${c.imageUrl}}" alt="profile photo">
+                        <img class="contact_profile_pic" src="" th:src="@{'/image/'+${c.imageUrl}}" alt="img">
                         <span th:text="${c.name}"></span>
                     </td>
                     <td >
@@ -35,14 +35,17 @@
                     </td>
                     <td th:text="${c.phoneNo}"></td>
                     <td>
-                        <a href="#" class="item"> <i class="fa-solid fa-pen"></i> </a>
-                        <a href="#" class="item"> <i class="fa-solid fa-trash" style="color:red"></i> </a>
+                        <a href="#"  class="item"> <i class="fa-solid fa-pen"></i> </a>
+<!--                        sweet delete using cdn -->
+<!--                        <a href="#" th:href="@{'/user/delete/'+${c.cId}}" class="item"> <i class="fa-solid fa-trash" style="color:red"></i> </a>-->
+                        <a href="#" th:onclick="|deleteContact(${c.cId})|" class="item"> <i class="fa-solid fa-trash" style="color:red"></i> </a>
                     </td>
                 </tr>
                 </tbody>
             </table>
 
             <!-- Pagination-->
+<!--            todo fix pagination bug-->
             <nav aria-label="Page navigation example">
                 <ul class="pagination">
                     <li th:if="${currentPage != 0}" class="page-item">
