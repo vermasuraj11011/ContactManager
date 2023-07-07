@@ -101,3 +101,24 @@ td .contact_profile_pic{
     object-fit:cover;
     border-radius:50%;
 }
+
+.post-update-delete{
+    width: 74%;
+    display: flex;
+    justify-content: space-around;
+}
+
+.table td, .table th {
+    padding: 0.75rem;
+    border-top: 1px solid #dee2e6;
+}
+
+.container-body-btn{
+    width:100%;
+    display: flex;
+    justify-content: space-around;
+}
+
+.container-body-btn .row{
+    width:20%
+}

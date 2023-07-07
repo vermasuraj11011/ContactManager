@@ -7,7 +7,9 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 public interface FileService {
-    String uploadImage(String path, MultipartFile file) throws Exception;
+    String uploadImage(MultipartFile file) throws Exception;
+
+    Boolean deleteImage(String fileName) throws Exception;
 
     InputStream getResources(String path, String fileName) throws FileNotFoundException;
 }

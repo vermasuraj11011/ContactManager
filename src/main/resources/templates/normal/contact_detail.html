@@ -47,16 +47,32 @@
                     <th:block th:utext="${contact.description}"></th:block>
                 </div>
 
-                <div class="container mt-3">
-                    <button class="btn btn-primary btn-sm">Update</button>
-                    <button th:onclick="|deleteContact(${contact.cId})|" class="btn btn-danger btn-sm">Delete</button>
+                <div class="container text-center mt-3">
+                    <div class="container-body-btn">
+                        <div class="row">
+                            <div class="col">
+                                <form method="POST"
+                                      th:action="@{'/user/update-contact/'+${contact.cId}}">
+                                    <button type="submit"
+                                            class="btn btn-primary btn-sm">
+                                        Update
+                                    </button>
+                                </form>
+                            </div>
+                            <div class="col">
+                                <button th:onclick="|deleteContact(${contact.cId})|" class="btn btn-danger btn-sm">Delete
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
             </div>
         </div>
     </div>
     <!--        todo make a separate page for this-->
-    <h1 class="text-center p-3 bg-danger text-white mr-3"  th:unless="${contact}">You are not authorise to see this contact</h1>
+    <h1 class="text-center p-3 bg-danger text-white mr-3" th:unless="${contact}">You are not authorise to see this
+        contact</h1>
 </section>
 </body>
 </html>

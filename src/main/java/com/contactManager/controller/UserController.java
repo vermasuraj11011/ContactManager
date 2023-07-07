@@ -71,7 +71,7 @@ public class UserController {
                 System.out.println("Image is empty");
                 contact.setImageUrl(Constant.DEFAULT_CONTACT_IMAGE);
             } else {
-                String fileName = this.fileService.uploadImage(Constant.PATH_SAVE_IMAGE, imageFile);
+                String fileName = this.fileService.uploadImage(imageFile);
                 contact.setImageUrl(fileName);
                 System.out.println("Image is uploaded");
             }
@@ -132,12 +132,52 @@ public class UserController {
             @PathVariable("cId") Integer cId,
             Model model,
             HttpSession session
-    ){
-        // TODO: 07/07/23 handel .get with proper exception
+    ) {
+        // TODO: 07/07/23 handel .get with proper exception and check if contact belongs to the same user
         Contact contact = this.contactRepo.findById(cId).get();
         contact.setUser(null);
         this.contactRepo.delete(contact);
-        session.setAttribute("message", new Message("Contact deleted successfully","success"));
+        session.setAttribute("message", new Message("Contact deleted successfully", "success"));
         return "redirect:/user/show-contacts/1";
+    }
+
+    //    update contact details form opens
+    @PostMapping("/update-contact/{cId}")
+    public String showUpdateContactForm(
+            @PathVariable("cId") Integer cId,
+            Model model
+    ) {
+        Contact contact = this.contactRepo.findById(cId).get();
+        model.addAttribute("contact", contact);
+        model.addAttribute("title", "Update Contact");
+        return "/normal/update_contact";
+    }
+
+    //    update contact detail
+    @PostMapping("/process-update")
+    public String updateContact(
+            @ModelAttribute Contact contact,
+            @RequestParam("profileImage") MultipartFile image,
+            HttpSession session,
+            Principal principal
+    ) {
+        try {
+            Contact oldContactDetail = this.contactRepo.findById(contact.getCId()).get();
+            if (!image.isEmpty()) {
+                Boolean isDeleted = this.fileService.deleteImage(oldContactDetail.getImageUrl());
+                String imageName = this.fileService.uploadImage(image);
+                contact.setImageUrl(imageName);
+            } else {
+                contact.setImageUrl(oldContactDetail.getImageUrl());
+            }
+            User user = this.userRepo.getUserByUserName(principal.getName());
+            contact.setUser(user);
+            this.contactRepo.save(contact);
+            session.setAttribute("Your contact is updated", "success");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
+        return "redirect:/user/contact/" + contact.getCId();
     }
 }
