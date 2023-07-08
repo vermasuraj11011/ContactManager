@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeLeaf.org"
+      th:replace="normal/base::layout(~{::section})">
+<head>
+    <meta charset="UTF-8">
+    <title>User Profile</title>
+</head>
+<body>
+<section>
+    <div class="container">
+        <div class="card text-center ">
+            <div class="card-body mt-3">
+                <img style="height:200px; width:200px; object-fit:cover"
+                     class="contact_profile_pic"
+                     th:src="@{'/image/'+${user.imageUrl}}"
+                     alt="img">
+                <h1 th:text="${user.name}"></h1>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">#UserID</th>
+                        <th scope="col"><span th:text="'CM2023'+${user.id}"></span></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th scope="row">Email</th>
+                        <td><span th:text="${user.email}"></span></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Role</th>
+                        <td><span th:text="${(user.role == 'ROLE_USER') ? 'User' : 'Admin'}"></span></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">About</th>
+                        <td><span th:text="${user.about}"></span></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

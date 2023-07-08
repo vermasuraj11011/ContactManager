@@ -7,8 +7,32 @@
     <title>User Dashboard</title>
 </head>
 <body>
-    <section>
-        <h1>DashBoard</h1>
-    </section>
+<section>
+    <div class="container">
+        <div class="card">
+            <div class="card-body text-center">
+                <div class="container">
+                    <img style="height:200px; width:200px; object-fit:cover"
+                         class="logo-pic contact_profile_pic"
+                         th:src="@{'/image/contact_manager_logo.png'}"
+                         alt="img">
+                </div>
+                <h1 class="text-center mt-3 text-secondary font-italic font-weight-light">
+                    Add your contact to cloud...
+                </h1>
+
+                <p>
+                    "Welcome to our Contact Manager! Manage your contacts like never before with our intelligent
+                    and intuitive platform. Stay organized, save time, and streamline your communication effortlessly.
+                    Our contact manager is designed to provide you with a seamless experience, allowing you to easily
+                    store, search, and update your contacts anytime, anywhere. Take control of your contacts and enhance
+                    your productivity with our Contact Manager today!.
+                </p>
+
+                <a th:href="@{/user/add-contact}" class="btn btn-primary text-uppercase">Add New Contact</a>
+            </div>
+        </div>
+    </div>
+</section>
 </body>
 </html>

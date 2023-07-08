@@ -15,11 +15,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpSession;
 import java.security.Principal;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/user")
@@ -179,5 +176,11 @@ public class UserController {
             e.printStackTrace();
         }
         return "redirect:/user/contact/" + contact.getCId();
+    }
+
+//    show user profile view
+    @GetMapping("/profile")
+    public String userProfileView(){
+        return "/normal/profile";
     }
 }
