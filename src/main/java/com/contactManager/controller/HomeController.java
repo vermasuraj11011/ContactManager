@@ -1,9 +1,11 @@
 package com.contactManager.controller;
 
 import com.contactManager.config.Constant;
+import com.contactManager.entities.EmailMessage;
 import com.contactManager.entities.User;
 import com.contactManager.helper.Message;
 import com.contactManager.repository.UserRepo;
+import com.contactManager.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -23,8 +25,11 @@ public class HomeController {
     @Autowired
     private UserRepo userRepo;
 
+    @Autowired
+    private EmailService emailService;
+
     @RequestMapping("/")
-    public String home(Model model)  {
+    public String home(Model model) {
         model.addAttribute("title", "Home - This is Contact Manager");
         return "home";
     }
@@ -74,7 +79,9 @@ public class HomeController {
             user.setImageUrl("default.png");
             user.setPassword(this.passwordEncoder.encode(user.getPassword()));
 
-            this.userRepo.save(user);
+            User savedUser = this.userRepo.save(user);
+
+            sendEmail(savedUser);
 
             model.addAttribute("user", new User());
             session.setAttribute("message", new Message("User added successfully", "alert-success"));
@@ -85,5 +92,17 @@ public class HomeController {
                     new Message("Something went wrong " + e.getMessage(), "alert-danger"));
             return "signup";
         }
+    }
+
+    private void sendEmail(User user) {
+        EmailMessage message = new EmailMessage();
+        message.setSubject("Welcome to Contact Manager");
+        message.setTo(user.getEmail());
+        message.setSubject("Welcome to Contact Manager " + user.getName());
+
+        String welcomeTemplate = Constant.PATH_TO_TEMPLATE + "success_login_email_template.html";
+
+//            send welcome email to the user
+        this.emailService.sendMail(user, message, null, null, welcomeTemplate);
     }
 }
