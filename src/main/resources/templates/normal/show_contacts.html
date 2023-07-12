@@ -1,81 +1,99 @@
 <!DOCTYPE html>
-<html lang="en"
-      xmlns:th="http://www.thymeLeaf.org"
-      th:replace="normal/base::layout(~{::section})">
+<html lang="en" xmlns:th="http://www.thymeLeaf.org" th:replace="normal/base::layout(~{::section})">
+
 <head>
     <meta charset="UTF-8">
     <title>View Contact</title>
 </head>
+
 <body>
-<section>
-    <div class="card mr-3 ml-3">
-        <div class="card-body">
-            <h1 class="text-center">Contacts</h1>
-            <table class="table">
-                <thead>
-                <tr>
-                    <th scope="col">#ID</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Phone</th>
-                    <th scope="col" style="width=50px">Update/Delete</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="c : ${contacts}">
-                    <th scope="row" th:text="'CM2023'+${c.cId}">1</th>
-                    <td>
-                        <img class="contact_profile_pic" src="" th:src="@{'/image/'+${c.imageUrl}}" alt="img">
-                        <span th:text="${c.name}"></span>
-                    </td>
-                    <td>
-                        <a th:href="@{'/user/contact/'+${c.cId}}">
-                            <span th:text="${c.email}"></span>
-                        </a>
-                    </td>
-                    <td th:text="${c.phoneNo}"></td>
-                    <td>
-                        <div class="post-update-delete">
-                            <div class="row">
-                                <div class="">
-                                    <!--  update contact-->
-                                    <form th:object="${c}" action="" method="POST" th:id="'submit_update_form'+${c.cId}" th:action="@{'/user/update-contact/'+${c.cId}}">
-                                        <a href="#" th:onclick="|submitForm('submit_update_form'+${c.cId})|"  class="item"><i class="fa-solid fa-pen"></i></a>
-                                    </form>
-                                </div>
-                                <div class="">
-                                    <!-- delete contact-->
-                                    <a href="#" th:onclick="|deleteContact(${c.cId})|" class="item"><i class="fa-solid fa-trash" style="color:red"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+    <section>
+        <div class="card mr-3 ml-3">
+            <div class="card-body">
+                <h1 class="text-center">Contacts</h1>
 
-            <!-- Pagination-->
-            <!--            todo fix pagination bug-->
-            <nav aria-label="Page navigation example">
-                <ul class="pagination">
-                    <li th:if="${currentPage != 0}" class="page-item">
-                        <a class="page-link" th:href="'/user/show-contacts/'+${currentPage}" href="#">Previous</a>
-                    </li>
-                    <li th:each="i : ${#numbers.sequence(1,totalPages)}"
-                        th:classAppend="${currentPage == i-1 ? 'active' : ''}"
-                        class="page-item">
-                        <a class="page-link" th:href="'/user/show-contacts/'+${i}" href="#">
-                            <span th:text="${i}"></span>
-                        </a>
-                    </li>
-                    <li th:if="${currentPage + 1 != totalPages}" class="page-item">
-                        <a class="page-link" th:href="'/user/show-contacts/'+${currentPage+2}" href="#">Next</a>
-                    </li>
-                </ul>
-            </nav>
+                <!--            search contact-->
 
+                <div class="search-container my-3">
+                    <input onkeyup="search()" id="search-input" type="text" class="form-control" placeholder="Search your contact">
+                    <div class="search-result">
+                        <h1>Hi..</h1>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th scope="col">#ID</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Phone</th>
+                                <th scope="col" style="width:50px">Update/Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="c : ${contacts}">
+                                <th scope="row" th:text="'CM2023'+${c.cId}">1</th>
+                                <td>
+                                    <img class="contact_profile_pic" src="" th:src="@{'/image/'+${c.imageUrl}}" alt="img">
+                                    <span th:text="${c.name}"></span>
+                                </td>
+                                <td>
+                                    <a th:href="@{'/user/contact/'+${c.cId}}">
+                                        <span th:text="${c.email}"></span>
+                                    </a>
+                                </td>
+                                <td th:text="${c.phoneNo}"></td>
+                                <td>
+                                    <div class="post-update-delete">
+                                        <div class="row">
+                                            <div class="">
+                                                <!--  update contact-->
+                                                <form th:object="${c}" action="" method="POST" th:id="'submit_update_form'+${c.cId}" th:action="@{'/user/update-contact/'+${c.cId}}">
+                                                    <a href="#" th:onclick="|submitForm('submit_update_form'+${c.cId})|" class="item"><i class="fa-solid fa-pen"></i></a>
+                                                </form>
+                                            </div>
+                                            <div class="">
+                                                <!-- delete contact-->
+                                                <a href="#" th:onclick="|deleteContact(${c.cId})|" class="item"><i class="fa-solid fa-trash" style="color:red"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+
+                <!-- Pagination-->
+                <!--            todo fix pagination bug-->
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        <li th:if="${currentPage != 0}" class="page-item">
+                            <a class="page-link" th:href="'/user/show-contacts/'+${currentPage}" href="#">Previous</a>
+                        </li>
+                        <li th:each="i : ${#numbers.sequence(1,totalPages)}" th:classAppend="${currentPage == i-1 ? 'active' : ''}" class="page-item">
+                            <a class="page-link" th:href="'/user/show-contacts/'+${i}" href="#">
+                                <span th:text="${i}"></span>
+                            </a>
+                        </li>
+                        <li th:if="${currentPage + 1 != totalPages}" class="page-item">
+                            <a class="page-link" th:href="'/user/show-contacts/'+${currentPage+2}" href="#">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+
+            </div>
         </div>
-    </div>
-</section>
+        <script>
+            $(document).ready(() => {
+                $(".item").removeClass("active")
+                $("#view-contact-link").addClass("active")
+            })
+        </script>
+    </section>
 </body>
+
 </html>

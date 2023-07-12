@@ -1,78 +1,80 @@
 <!DOCTYPE html>
-<html lang="en"
-      xmlns:th="http://www.thymeLeaf.org"
-      th:replace="normal/base::layout(~{::section})">
+<html lang="en" xmlns:th="http://www.thymeLeaf.org" th:replace="normal/base::layout(~{::section})">
+
 <head>
     <meta charset="UTF-8">
     <title>Contact Detail</title>
 </head>
+
 <body>
-<section>
-    <div class="card mr-3 ml-3" th:if="${contact}">
-        <div class="card-body">
-            <div class="container text-center">
-                <img style="height:200px; width:200px; object-fit:cover"
-                     class="contact_profile_pic" src=""
-                     th:src="@{'/image/'+${contact.imageUrl}}"
-                     alt="img">
-                <h3 class="mt-3">
-                    <span th:text="${contact.name}"></span>
-                    ( <span th:text="${contact.secondName}"></span> )
-                </h3>
+    <section>
+        <div class="card mr-3 ml-3" th:if="${contact}">
+            <div class="card-body">
+                <div class="container text-center">
+                    <img style="height:200px; width:200px; object-fit:cover" class="contact_profile_pic" src="" th:src="@{'/image/'+${contact.imageUrl}}" alt="img">
+                    <h3 class="mt-3">
+                        <span th:text="${contact.name}"></span> ( <span th:text="${contact.secondName}"></span> )
+                    </h3>
 
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th scope="col">#ID</th>
-                        <th scope="col"><span th:text="'CM2023'+${contact.cId}"></span></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <th scope="row">Phone No</th>
-                        <td><span th:text="${contact.phoneNo}"></span></td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Email</th>
-                        <td><span th:text="${contact.email}"></span></td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Work</th>
-                        <td><span th:text="${contact.work}"></span></td>
-                    </tr>
-                    </tbody>
-                </table>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#ID</th>
+                                    <th scope="col"><span th:text="'CM2023'+${contact.cId}"></span></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th scope="row">Phone No</th>
+                                    <td><span th:text="${contact.phoneNo}"></span></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Email</th>
+                                    <td><span th:text="${contact.email}"></span></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Work</th>
+                                    <td><span th:text="${contact.work}"></span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
 
-                <div class="description mt-3">
-                    <th:block th:utext="${contact.description}"></th:block>
-                </div>
+                    <div class="description mt-3">
+                        <th:block th:utext="${contact.description}"></th:block>
+                    </div>
 
-                <div class="container text-center mt-3">
-                    <div class="container-body-btn">
-                        <div class="row">
-                            <div class="col">
-                                <form method="POST"
-                                      th:action="@{'/user/update-contact/'+${contact.cId}}">
-                                    <button type="submit"
-                                            class="btn btn-primary btn-sm">
+                    <div class="container text-center mt-3">
+                        <div class="container-body-btn">
+                            <div class="row">
+                                <div class="col">
+                                    <form method="POST" th:action="@{'/user/update-contact/'+${contact.cId}}">
+                                        <button type="submit" class="btn btn-primary btn-sm">
                                         Update
                                     </button>
-                                </form>
-                            </div>
-                            <div class="col">
-                                <button th:onclick="|deleteContact(${contact.cId})|" class="btn btn-danger btn-sm">Delete
+                                    </form>
+                                </div>
+                                <div class="col">
+                                    <button th:onclick="|deleteContact(${contact.cId})|" class="btn btn-danger btn-sm">Delete
                                 </button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
+                </div>
             </div>
         </div>
-    </div>
-    <!--        todo make a separate page for this-->
-    <h1 class="text-center p-3 bg-danger text-white mr-3" th:unless="${contact}">You are not authorise to see this
-        contact</h1>
-</section>
+        <!--        todo make a separate page for this-->
+        <h1 class="text-center p-3 bg-danger text-white mr-3" th:unless="${contact}">You are not authorise to see this contact</h1>
+        <script>
+            $(document).ready(() => {
+                $(".item").removeClass("active")
+                $("#view-contact-link").addClass("active")
+            })
+        </script>
+    </section>
 </body>
+
 </html>
