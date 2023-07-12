@@ -1,9 +1,15 @@
 package com.contactManager.service;
 
 import com.contactManager.config.Constant;
+import com.contactManager.config.Util;
 import com.contactManager.entities.EmailMessage;
 import com.contactManager.entities.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,7 +26,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 @Service
@@ -32,9 +40,12 @@ public class EmailService {
     @Value("${emailUserName}")
     String userName;
 
-    private final Logger LOGGER = Logger.getLogger(EmailMessage.class.getName());
+    @Autowired
+    private Util util;
 
-    public void sendMail(
+    private final Logger LOGGER = LoggerFactory.getLogger(EmailMessage.class.getName());
+
+    public Boolean sendMail(
             User user,
             EmailMessage message,
             List<MultipartFile> attachments,
@@ -72,7 +83,7 @@ public class EmailService {
             MimeMultipart mimeMultipart = new MimeMultipart();
 
             MimeBodyPart bodyPart = new MimeBodyPart();
-            String htmlContent = readFileAsString(templatePath).replace("***username***", user.getName());
+            String htmlContent = this.util.readFileAsString(templatePath).replace("***username***", user.getName());
             bodyPart.setContent(htmlContent, "text/html");
             mimeMultipart.addBodyPart(bodyPart);
 
@@ -83,7 +94,7 @@ public class EmailService {
                     try {
                         mimeMultipart.addBodyPart(bodyPart1);
                     } catch (MessagingException e) {
-                        throw new RuntimeException(e);
+                        LOGGER.error("email sent failed for user " + user.getEmail() + " with message : " + e.getMessage());
                     }
                 });
             }
@@ -96,8 +107,10 @@ public class EmailService {
             LOGGER.info("Email sent to " + user.getName() + " successfully");
 
         } catch (Exception e) {
-            LOGGER.throwing(e.getMessage(), "sendEmail", e);
+            LOGGER.error("email sent failed for user " + user.getEmail() + " with message : " + e.getMessage());
+            return false;
         }
+        return true;
     }
 
     private List<MimeBodyPart> addAttachments(
@@ -118,6 +131,7 @@ public class EmailService {
                     attachment.setFileName(file.getOriginalFilename());
                     bodyParts.add(attachment);
                 } catch (IOException | MessagingException e) {
+                    LOGGER.error("Failed to create file " + e.getMessage());
                     throw new RuntimeException(e);
                 }
             });
@@ -130,22 +144,12 @@ public class EmailService {
                 try {
                     attachment.attachFile(file);
                 } catch (IOException | MessagingException e) {
+                    LOGGER.error("Failed to create file " + e.getMessage());
                     throw new RuntimeException(e);
                 }
                 bodyParts.add(attachment);
             });
         }
         return bodyParts;
-    }
-
-    public static String readFileAsString(String filePath) throws IOException {
-        StringBuilder contentBuilder = new StringBuilder();
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                contentBuilder.append(line);
-            }
-        }
-        return contentBuilder.toString();
     }
 }

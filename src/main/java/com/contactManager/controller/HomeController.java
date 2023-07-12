@@ -4,17 +4,23 @@ import com.contactManager.config.Constant;
 import com.contactManager.entities.EmailMessage;
 import com.contactManager.entities.User;
 import com.contactManager.helper.Message;
+import com.contactManager.payload.UserDto;
 import com.contactManager.repository.UserRepo;
 import com.contactManager.service.EmailService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 public class HomeController {
@@ -27,6 +33,8 @@ public class HomeController {
 
     @Autowired
     private EmailService emailService;
+
+    private final Logger LOGGER = LoggerFactory.getLogger(HomeController.class.getName());
 
     @RequestMapping("/")
     public String home(Model model) {
@@ -81,7 +89,7 @@ public class HomeController {
 
             User savedUser = this.userRepo.save(user);
 
-            sendEmail(savedUser);
+            Boolean isEmailSend = sendEmail(new UserDto(savedUser.getId(), savedUser.getName(), savedUser.getEmail()), null, null);
 
             model.addAttribute("user", new User());
             session.setAttribute("message", new Message("User added successfully", "alert-success"));
@@ -94,15 +102,19 @@ public class HomeController {
         }
     }
 
-    private void sendEmail(User user) {
+    private Boolean sendEmail(
+            UserDto userDot,
+            List<MultipartFile> attachments,
+            List<String> attachmentPath) {
         EmailMessage message = new EmailMessage();
         message.setSubject("Welcome to Contact Manager");
-        message.setTo(user.getEmail());
-        message.setSubject("Welcome to Contact Manager " + user.getName());
+        message.setTo(userDot.getEmail());
+        message.setSubject("Welcome to Contact Manager " + userDot.getName());
 
         String welcomeTemplate = Constant.PATH_TO_TEMPLATE + "success_login_email_template.html";
+        User user = this.userRepo.getUserByUserName(userDot.getEmail());
 
 //            send welcome email to the user
-        this.emailService.sendMail(user, message, null, null, welcomeTemplate);
+        return this.emailService.sendMail(user, message, attachments, attachmentPath, welcomeTemplate);
     }
 }
