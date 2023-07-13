@@ -11,10 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
 import javax.servlet.http.HttpSession;
 import java.security.Principal;
 
@@ -30,6 +33,9 @@ public class UserController {
 
     @Autowired
     private ContactRepo contactRepo;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     @ModelAttribute
     private void addCommonData(Model model, Principal principal) {
@@ -178,9 +184,39 @@ public class UserController {
         return "redirect:/user/contact/" + contact.getCId();
     }
 
-//    show user profile view
+    //    show user profile view
     @GetMapping("/profile")
-    public String userProfileView(){
+    public String userProfileView(Model model) {
+        model.addAttribute("title", "Profile");
         return "/normal/profile";
+    }
+
+    //    show setting view
+    @GetMapping("/setting")
+    public String userSetting(Model model) {
+        model.addAttribute("title", "setting");
+        return "/normal/setting";
+    }
+
+    //    reset password
+    @PostMapping("/change-password")
+    public String changePassword(
+            @RequestParam("oldPassword") String oldPass,
+            @RequestParam("newPassword") String newPass,
+            HttpSession session,
+            Principal principal
+    ) {
+        String userName = principal.getName();
+        User user = this.userRepo.getUserByUserName(userName);
+        if (passwordEncoder.matches(oldPass, user.getPassword())) {
+            String newPassword = this.passwordEncoder.encode(newPass);
+            user.setPassword(newPassword);
+            this.userRepo.save(user);
+            session.setAttribute("message", new Message("Password changed successfully...", "success"));
+        } else {
+            session.setAttribute("message", new Message("Old password is wrong", "danger"));
+            return "redirect:/user/setting";
+        }
+        return "redirect:/user/index";
     }
 }

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeLeaf.org" th:replace="normal/base::layout(~{::section})">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Setting</title>
+</head>
+
+<body>
+    <section>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+
+                            <h1 class="mb-3">Change Password</h1>
+                            <form action="" th:action="@{/user/change-password}" method="post">
+                                <!-- old password -->
+                                <div class="form-group">
+                                    <input name="oldPassword" type="password" class="form-control" placeholder="Enter old password">
+                                </div>
+                                <!-- new password -->
+                                <div class="form-group">
+                                    <input name="newPassword" type="password" class="form-control" placeholder="Enter new password">
+                                </div>
+                                <button class="btn btn-success mr-3" type="submit">Change Password</button>
+                                <button class="btn btn-warning ml-3" type="reset">Reset Password</button>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            $(document).ready(() => {
+                $(".item").removeClass("active")
+                $("#setting-link").addClass("active")
+            })
+        </script>
+
+    </section>
+</body>
+
+</html>
