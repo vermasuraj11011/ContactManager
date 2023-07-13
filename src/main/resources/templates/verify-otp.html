@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeLeaf.org" th:replace="base::layout(~{::section})">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Email Form</title>
+</head>
+
+<body>
+    <section>
+        <div id="login">
+            <div class="container">
+                <div id="login-row" class="row justify-content-center align-items-center">
+                    <div id="login-column" class="col-md-6">
+                        <div id="login-box" style="height: 250px;" class="col-md-12">
+                            <form id="login-form" class="form" th:action="@{/verify-otp}" action="#" method="post">
+                                <h3 class="text-center text-info">Enter Otp</h3>
+
+                                <div class="container" th:if="${session.message}">
+                                    <div class="alert my-2 text-center" th:classAppend="${(session.message.type == 'success' ? 'alert-success': 'alert-danger')}" role="alert">
+                                        <span th:text="${session.message.content}"></span>
+                                    </div>
+                                    <th:block th:text="${#session.removeAttribute('message')}"></th:block>
+                                </div>
+                                <!-- 
+                                <div class="alert alert-success" role="success">
+                                    OTP send successfully
+                                </div> -->
+
+                                <div class="form-group">
+                                    <input required="required" type="number" placeholder="Enter Otp" name="otp" id="otp" class="form-control">
+                                </div>
+
+                                <button class="btn btn-warning" type="submit">Verify</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>

@@ -146,3 +146,7 @@ td .contact_profile_pic {
     background-color: #009688 !important;
     color: white !important;
 }
+
+#forgot-password a {
+    color: #17a2b8!important;
+}

@@ -6,10 +6,6 @@ import com.contactManager.entities.EmailMessage;
 import com.contactManager.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,9 +15,7 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -83,7 +77,12 @@ public class EmailService {
             MimeMultipart mimeMultipart = new MimeMultipart();
 
             MimeBodyPart bodyPart = new MimeBodyPart();
-            String htmlContent = this.util.readFileAsString(templatePath).replace("***username***", user.getName());
+            String htmlContent = null;
+            if (templatePath != null) {
+                htmlContent = this.util.readFileAsString(templatePath).replace("***username***", user.getName());
+            } else {
+                htmlContent = "<p>" + message.getMessage() + "</p>";
+            }
             bodyPart.setContent(htmlContent, "text/html");
             mimeMultipart.addBodyPart(bodyPart);
 
