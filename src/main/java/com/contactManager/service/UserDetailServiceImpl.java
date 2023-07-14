@@ -1,6 +1,6 @@
 package com.contactManager.service;
 
-import com.contactManager.entities.CustomUserDetails;
+import com.contactManager.payload.CustomUserDetails;
 import com.contactManager.entities.User;
 import com.contactManager.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;

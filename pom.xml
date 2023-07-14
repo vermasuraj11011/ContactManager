@@ -53,6 +53,14 @@
 			<version>2.2.6.RELEASE</version>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/com.razorpay/razorpay-java -->
+		<dependency>
+			<groupId>com.razorpay</groupId>
+			<artifactId>razorpay-java</artifactId>
+			<version>1.4.4</version>
+		</dependency>
+
+
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-text</artifactId>

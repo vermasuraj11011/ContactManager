@@ -2,7 +2,7 @@ package com.contactManager.service;
 
 import com.contactManager.config.Constant;
 import com.contactManager.config.Util;
-import com.contactManager.entities.EmailMessage;
+import com.contactManager.payload.EmailMessage;
 import com.contactManager.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,10 +28,10 @@ import org.slf4j.LoggerFactory;
 @Service
 public class EmailService {
 
-    @Value("${emailPassword}")
+    @Value("${email.password}")
     String password;
 
-    @Value("${emailUserName}")
+    @Value("${email.user_name}")
     String userName;
 
     @Autowired

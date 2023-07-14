@@ -1,6 +1,6 @@
 package com.contactManager.config;
 
-import com.contactManager.entities.EmailMessage;
+import com.contactManager.payload.EmailMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;

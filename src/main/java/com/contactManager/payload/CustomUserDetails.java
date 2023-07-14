@@ -1,5 +1,6 @@
-package com.contactManager.entities;
+package com.contactManager.payload;
 
+import com.contactManager.entities.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -1,7 +1,7 @@
 package com.contactManager.service;
 
 import com.contactManager.config.AwsSQSConfig;
-import com.contactManager.entities.EmailMessage;
+import com.contactManager.payload.EmailMessage;
 import com.contactManager.payload.EmailDto;
 import com.contactManager.payload.UserDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -10,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cloud.aws.messaging.listener.annotation.SqsListener;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 

@@ -2,17 +2,24 @@ package com.contactManager.controller;
 
 import com.contactManager.config.Constant;
 import com.contactManager.entities.Contact;
+import com.contactManager.entities.MyOrder;
 import com.contactManager.entities.User;
 import com.contactManager.helper.Message;
 import com.contactManager.repository.ContactRepo;
 import com.contactManager.repository.UserRepo;
 import com.contactManager.service.FileService;
+import com.contactManager.service.MyOrderService;
+import com.razorpay.Order;
+import com.razorpay.RazorpayClient;
+import com.razorpay.RazorpayException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
 import java.security.Principal;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/user")
@@ -36,6 +44,15 @@ public class UserController {
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+
+    @Autowired
+    private MyOrderService myOrderService;
+
+    @Value("${razor.key}")
+    private String razorKey;
+
+    @Value("${razor.secret}")
+    private String razorValue;
 
     @ModelAttribute
     private void addCommonData(Model model, Principal principal) {
@@ -218,5 +235,54 @@ public class UserController {
             return "redirect:/user/setting";
         }
         return "redirect:/user/index";
+    }
+
+    //  integrating razor payment
+    @PostMapping("/create-payment-order")
+    @ResponseBody
+    public String createOrder(
+            @RequestBody Map<String, Object> request,
+            Principal principal
+    ) throws RazorpayException {
+        System.out.println("order executed");
+        int amount = Integer.parseInt(request.get("amount").toString());
+
+        RazorpayClient client = new RazorpayClient(this.razorKey, this.razorValue);
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("amount", amount * 100);
+        jsonObject.put("currency", "INR");
+        jsonObject.put("receipt", "txn_235425");
+
+//        create new order
+        Order order = client.orders.create(jsonObject);
+
+        MyOrder myOrder = new MyOrder();
+        myOrder.setAmount(order.get("amount"));
+        myOrder.setRazorOrderId(order.get("id"));
+        myOrder.setPaymentId(null);
+        myOrder.setStatus("created");
+        myOrder.setUser(this.userRepo.getUserByUserName(principal.getName()));
+        myOrder.setReceipt(order.get("receipt"));
+
+        this.myOrderService.create(myOrder);
+
+        System.out.println(order);
+        return order.toString();
+    }
+
+    @PostMapping("/update_payment")
+    public ResponseEntity<?> updateOrder(
+            @RequestBody Map<String, Object> data,
+            Principal principal
+    ) {
+        System.out.println(data);
+        String orderId = (String) data.get("order_id");
+        MyOrder myOrder = this.myOrderService.findByOrderId(orderId);
+        myOrder.setPaymentId((String) data.get("payment_id"));
+        myOrder.setStatus((String) data.get("status"));
+
+        this.myOrderService.updateOrder(myOrder);
+        return ResponseEntity.ok("success");
     }
 }

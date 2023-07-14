@@ -1,7 +1,7 @@
 package com.contactManager.controller;
 
 import com.contactManager.config.Constant;
-import com.contactManager.entities.EmailMessage;
+import com.contactManager.payload.EmailMessage;
 import com.contactManager.entities.User;
 import com.contactManager.enums.EmailTypes;
 import com.contactManager.helper.Message;
@@ -11,7 +11,6 @@ import com.contactManager.service.EmailService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,7 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.security.Principal;
 import java.util.List;
 import java.util.Random;
 
