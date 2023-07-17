@@ -1,12 +1,32 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeLeaf.org" th:replace="base::layout(~{::section})">
 <head>
-  <meta charset="UTF-8">
-  <title>This is Home Page</title>
+    <meta charset="UTF-8">
+    <title>This is Home Page</title>
 </head>
 <body>
 <section>
-  <h1>This is About Page</h1>
+    <div class="about-section mt-5">
+        <h1>Contact Manager</h1>
+        <p>Welcome to our Contact Manager! Manage your contacts like never before with our intelligent and intuitive
+            platform. Stay organized, save time, and streamline your communication effortlessly. Our contact manager is
+            designed to provide you with a seamless
+            experience, allowing you to easily store, search, and update your contacts anytime, anywhere. Take control
+            of your contacts and enhance your productivity with our Contact Manager today!.</p>
+    </div>
+
+    <div class="container mt-2 text-center w-30" >
+        <div class="card p-2">
+            <div class="container">
+                <img th:src="@{image/my-pic.jpg}" class="rounded-circle w-50" alt="Suraj" style="width:100%">
+            </div>
+            <div class="container mt-2">
+                <h2>Suraj Verma</h2>
+                <p class="mb-2">Developer</p>
+                <p>vermasuraj008@gmail.com</p>
+            </div>
+        </div>
+    </div>
 </section>
 </body>
 </html>
