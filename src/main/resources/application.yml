@@ -1,0 +1,18 @@
+cloud:
+  aws:
+    region:
+      static: us-east-2
+      auto: false
+    credentials:
+      access-key: ************
+      secret-key: **************
+    end-point:
+      uri: *************
+
+razor:
+  key: ***************
+  secret: ****************
+
+email:
+  user_name: ****************
+  password: **************
