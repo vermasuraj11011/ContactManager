@@ -1,18 +1,23 @@
 cloud:
   aws:
     region:
-      static: us-east-2
+      # AWS region
+      static: <region>
       auto: false
     credentials:
-      access-key: ************
-      secret-key: **************
+      # I am role creds
+      access-key: <key_id>
+      secret-key: <key_value>
     end-point:
-      uri: *************
+      # Queue url from AWS
+      uri: <url>
 
 razor:
-  key: ***************
-  secret: ****************
+  # https://razorpay.com/docs/payments/dashboard/account-settings/api-keys/
+  key: <key_id>
+  secret: <key_value>
 
 email:
-  user_name: ****************
-  password: **************
+  user_name: <email_id>
+  # https://support.google.com/mail/answer/185833?hl=en
+  password: <app_password>
