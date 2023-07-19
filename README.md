@@ -21,8 +21,9 @@ containing both frontend and backend.
 
 - SpringBoot (Spring Security, JavaX, OpenPdf, JPA)
 - Thymeleaf
+- MySql
 - AWS (Queue, Lambda, SES and CloudWatch)
-- Html, CSS and JavaScript
+- Html, CSS, and JavaScript
 - Python (Lambda Script)
 
 ## Integration
