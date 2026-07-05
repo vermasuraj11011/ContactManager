@@ -2,7 +2,7 @@ cloud:
   aws:
     region:
       # AWS region
-      static: <region>
+      static: us-east-2
       auto: false
     credentials:
       # I am role creds
